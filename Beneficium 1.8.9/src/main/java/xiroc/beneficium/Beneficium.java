@@ -27,7 +27,7 @@ import xiroc.beneficium.item.ItemTalismanOfTheBenefactor;
 import xiroc.beneficium.proxy.ServerProxy;
 import xiroc.beneficium.util.EventManager;
 
-@Mod(modid = "beneficium", name = "Beneficium", version = "0.1.0", acceptedMinecraftVersions = "1.8, 1.8.1, 1.8.2, 1.8.3, 1.8.4, 1.8.5, 1.8.6, 1.8.7, 1.8.8, 1.8.9")
+@Mod(modid = "beneficium", name = "Beneficium", version = "alpha", acceptedMinecraftVersions = "1.8, 1.8.1, 1.8.2, 1.8.3, 1.8.4, 1.8.5, 1.8.6, 1.8.7, 1.8.8, 1.8.9")
 public class Beneficium {
 
 	@SidedProxy(serverSide = "xiroc.beneficium.proxy.ServerProxy", clientSide = "xiroc.beneficium.proxy.ClientProxy")
@@ -49,7 +49,6 @@ public class Beneficium {
 		data.authorList.add("XIROC");
 		data.version = "0.1.0";
 		data.url = "coming soon";
-		data.description = "";
 		MinecraftForge.EVENT_BUS.register(new EventManager());
 	}
 
