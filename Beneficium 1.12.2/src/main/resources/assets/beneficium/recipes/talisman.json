@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "gdg",
+    "ded",
+    "gdg"
+  ],
+  "key": {
+    "g": {
+      "item": "minecraft:gold_ingot"
+    },
+	 "d": {
+      "item": "minecraft:diamond"
+    },
+	 "e": {
+      "item": "minecraft:emerald"
+    }
+  },
+  "result": {
+    "item": "beneficium:talisman",
+    "data": 0
+  }
+}
