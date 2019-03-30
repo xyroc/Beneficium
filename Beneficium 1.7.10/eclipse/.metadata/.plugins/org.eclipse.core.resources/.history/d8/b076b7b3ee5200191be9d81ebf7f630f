@@ -1,0 +1,63 @@
+package xiroc.beneficium.util;
+
+import cpw.mods.fml.common.Mod.EventHandler;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.event.entity.player.EntityInteractEvent;
+import net.minecraftforge.event.entity.player.PlayerSleepInBedEvent;
+import xiroc.beneficium.Beneficium;
+
+public class EventManager {
+
+	@EventHandler
+	public void onEXP(EntityInteractEvent event) {
+		//if(event.entityPlayer.worldObj.isRemote) return;
+		/*switch (getTalismanLevel(event.entityPlayer.inventory.mainInventory)) {
+		case 0:
+			return;
+		case 1: {
+			long xp = (long) (Beneficium.XP_MULTIPLIER * event.orb.xpValue);
+			if (xp > Integer.MAX_VALUE) {
+				Beneficium.logger.warn("The multiplied exp exceeds the maximum value! Returning Integer.MAX_VALUE");
+				xp = Integer.MAX_VALUE;
+			}
+			event.orb.xpValue = (int) xp;
+			break;
+		}
+		case 2: {
+			long xp = (long) (Beneficium.XP_MULTIPLIER_DIVINE * event.orb.xpValue);
+			if (xp > Integer.MAX_VALUE) {
+				Beneficium.logger.warn("The multiplied exp exceeds the maximum value! Returning Integer.MAX_VALUE");
+				xp = Integer.MAX_VALUE;
+			}
+			event.orb.xpValue = (int) xp;
+			break;
+		}
+		}*/
+		Beneficium.logger.info("axa");
+		System.out.println("axa");
+
+	}
+
+	@EventHandler
+	public void onX(PlayerSleepInBedEvent e) {
+		Beneficium.logger.info("bed");
+		System.out.println("bed");
+	}
+
+	public static int getTalismanLevel(ItemStack[] items) {
+		int level = 0;
+		for (ItemStack stack : items) {
+			if (stack == null)
+				continue;
+			if (stack.getItem() == Beneficium.talismanOfTheBenefactor) {
+				int itemlevel = stack.getItemDamage() + 1;
+				if (itemlevel > level)
+					level = itemlevel;
+			}
+		}
+		return level;
+	}
+
+}
