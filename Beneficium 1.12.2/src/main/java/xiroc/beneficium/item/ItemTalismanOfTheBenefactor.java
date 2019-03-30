@@ -38,7 +38,8 @@ public class ItemTalismanOfTheBenefactor extends Item {
 	@SideOnly(Side.CLIENT)
 	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
 		super.getSubItems(tab, items);
-		items.add(new ItemStack(this, 1, 1));
+		if(tab == Beneficium.tabBeneficium) 
+			items.add(new ItemStack(this, 1, 1));
 	}
 
 	@Override
