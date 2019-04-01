@@ -2,6 +2,8 @@ package xiroc.beneficium.item;
 
 import java.util.List;
 
+import baubles.api.BaubleType;
+import baubles.api.IBauble;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
@@ -18,7 +20,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import xiroc.beneficium.Beneficium;
 
-public class ItemTalismanOfTheBenefactor extends Item {
+public class ItemTalismanOfTheBenefactor extends Item implements IBauble {
 
 	public ItemTalismanOfTheBenefactor() {
 		setRegistryName("talisman");
@@ -38,7 +40,7 @@ public class ItemTalismanOfTheBenefactor extends Item {
 	@SideOnly(Side.CLIENT)
 	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
 		super.getSubItems(tab, items);
-		if(tab == Beneficium.tabBeneficium) 
+		if (tab == Beneficium.tabBeneficium)
 			items.add(new ItemStack(this, 1, 1));
 	}
 
@@ -88,14 +90,27 @@ public class ItemTalismanOfTheBenefactor extends Item {
 		case 0:
 			tooltip.add(TextFormatting.GREEN + "Increases XP earned from XP orbs to "
 					+ (int) (Beneficium.XP_MULTIPLIER * 100) + "%");
+			if (Beneficium.XP_BOOST_ENABLE_LEVEL_TRESHOLD)
+				tooltip.add(TextFormatting.ITALIC + "" + TextFormatting.YELLOW
+						+ "The talisman is disabled when your level is below "
+						+ Beneficium.XP_BOOST_ENABLE_LEVEL_TRESHOLD_VALUE);
 			break;
 		case 1:
 			tooltip.add(TextFormatting.GRAY + "" + TextFormatting.ITALIC
 					+ "A lens made of an unknown material to concentrate the light of wisdom itself. This holy artifact has been bound to a charm.");
 			tooltip.add(TextFormatting.LIGHT_PURPLE + "Increases XP earned from XP orbs to "
 					+ (int) (Beneficium.XP_MULTIPLIER_DIVINE * 100) + "%");
+			if (Beneficium.XP_BOOST_ENABLE_LEVEL_TRESHOLD)
+				tooltip.add(TextFormatting.ITALIC + "" + TextFormatting.YELLOW
+						+ "The talisman is disabled when your level is below "
+						+ Beneficium.XP_BOOST_ENABLE_LEVEL_TRESHOLD_VALUE);
 			break;
 		}
+	}
+
+	@Override
+	public BaubleType getBaubleType(ItemStack itemstack) {
+		return BaubleType.CHARM;
 	}
 
 }
