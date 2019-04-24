@@ -118,13 +118,12 @@ public class EventManager {
 	public void onEXP(PlayerPickupXpEvent event) {
 		if (event.getEntityPlayer().world.isRemote)
 			return;
-		switch (Math.max(getTalismanLevel(event.getEntityPlayer().inventory.mainInventory),
-				getBaubleTalismanLevel(event.getEntityPlayer()))) {
+		switch (getBaubleTalismanLevel(event.getEntityPlayer())) {
 		case 0:
 			return;
 		case 1: {
-			if (Beneficium.XP_BOOST_ENABLE_LEVEL_TRESHOLD
-					&& event.getEntityPlayer().experienceLevel < Beneficium.XP_BOOST_ENABLE_LEVEL_TRESHOLD_VALUE)
+			if (Beneficium.XP_BOOST_ENABLE_LEVEL_THRESHOLD
+					&& event.getEntityPlayer().experienceLevel < Beneficium.XP_BOOST_ENABLE_LEVEL_THRESHOLD_VALUE)
 				return;
 			long xp = (long) (Beneficium.XP_MULTIPLIER * event.getOrb().xpValue);
 			if (xp > Integer.MAX_VALUE) {
@@ -135,8 +134,8 @@ public class EventManager {
 			break;
 		}
 		case 2: {
-			if (Beneficium.XP_BOOST_ENABLE_LEVEL_TRESHOLD
-					&& event.getEntityPlayer().experienceLevel < Beneficium.XP_BOOST_ENABLE_LEVEL_TRESHOLD_VALUE)
+			if (Beneficium.XP_BOOST_ENABLE_LEVEL_THRESHOLD
+					&& event.getEntityPlayer().experienceLevel < Beneficium.XP_BOOST_ENABLE_LEVEL_THRESHOLD_VALUE)
 				return;
 			long xp = (long) (Beneficium.XP_MULTIPLIER_DIVINE * event.getOrb().xpValue);
 			if (xp > Integer.MAX_VALUE) {
@@ -148,34 +147,6 @@ public class EventManager {
 		}
 		}
 
-	}
-
-	public static int getTalismanLevel(ItemStack[] items) {
-		int level = 0;
-		for (ItemStack stack : items) {
-			if (stack == null)
-				continue;
-			if (stack.getItem() == Beneficium.talismanOfTheBenefactor) {
-				int itemlevel = stack.getMetadata() + 1;
-				if (itemlevel > level)
-					level = itemlevel;
-			}
-		}
-		return level;
-	}
-
-	public static int getTalismanLevel(NonNullList<ItemStack> items) {
-		int level = 0;
-		for (ItemStack stack : items) {
-			if (stack == null)
-				continue;
-			if (stack.getItem() == Beneficium.talismanOfTheBenefactor) {
-				int itemlevel = stack.getMetadata() + 1;
-				if (itemlevel > level)
-					level = itemlevel;
-			}
-		}
-		return level;
 	}
 
 	public static int getBaubleTalismanLevel(EntityPlayer player) {

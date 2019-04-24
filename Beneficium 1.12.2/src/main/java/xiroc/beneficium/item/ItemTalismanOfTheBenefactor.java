@@ -90,20 +90,20 @@ public class ItemTalismanOfTheBenefactor extends Item implements IBauble {
 		case 0:
 			tooltip.add(TextFormatting.GREEN + "Increases XP earned from XP orbs to "
 					+ (int) (Beneficium.XP_MULTIPLIER * 100) + "%");
-			if (Beneficium.XP_BOOST_ENABLE_LEVEL_TRESHOLD)
+			if (Beneficium.XP_BOOST_ENABLE_LEVEL_THRESHOLD)
 				tooltip.add(TextFormatting.ITALIC + "" + TextFormatting.YELLOW
 						+ "The talisman is disabled when your level is below "
-						+ Beneficium.XP_BOOST_ENABLE_LEVEL_TRESHOLD_VALUE);
+						+ Beneficium.XP_BOOST_ENABLE_LEVEL_THRESHOLD_VALUE);
 			break;
 		case 1:
 			tooltip.add(TextFormatting.GRAY + "" + TextFormatting.ITALIC
 					+ "A lens made of an unknown material to concentrate the light of wisdom itself. This holy artifact has been bound to a charm.");
 			tooltip.add(TextFormatting.LIGHT_PURPLE + "Increases XP earned from XP orbs to "
 					+ (int) (Beneficium.XP_MULTIPLIER_DIVINE * 100) + "%");
-			if (Beneficium.XP_BOOST_ENABLE_LEVEL_TRESHOLD)
+			if (Beneficium.XP_BOOST_ENABLE_LEVEL_THRESHOLD)
 				tooltip.add(TextFormatting.ITALIC + "" + TextFormatting.YELLOW
 						+ "The talisman is disabled when your level is below "
-						+ Beneficium.XP_BOOST_ENABLE_LEVEL_TRESHOLD_VALUE);
+						+ Beneficium.XP_BOOST_ENABLE_LEVEL_THRESHOLD_VALUE);
 			break;
 		}
 	}
