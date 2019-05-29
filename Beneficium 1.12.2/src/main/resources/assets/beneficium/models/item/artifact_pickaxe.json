@@ -1,0 +1,9 @@
+{
+    "parent": "item/handheld",
+    "textures": {
+        "layer0":"beneficium:items/artifact_pickaxe"
+    },
+    "overrides": [
+        { "predicate": { "mode": 1 }, "model": "beneficium:item/artifact_pickaxe_active" }
+    ]
+}

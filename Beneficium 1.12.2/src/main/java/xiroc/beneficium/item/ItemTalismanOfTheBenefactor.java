@@ -19,6 +19,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import xiroc.beneficium.Beneficium;
+import xiroc.beneficium.util.ConfigHelper;
 
 public class ItemTalismanOfTheBenefactor extends Item implements IBauble {
 
@@ -89,21 +90,21 @@ public class ItemTalismanOfTheBenefactor extends Item implements IBauble {
 		switch (stack.getItemDamage()) {
 		case 0:
 			tooltip.add(TextFormatting.GREEN + "Increases XP earned from XP orbs to "
-					+ (int) (Beneficium.XP_MULTIPLIER * 100) + "%");
-			if (Beneficium.XP_BOOST_ENABLE_LEVEL_THRESHOLD)
+					+ (int) (ConfigHelper.getFloat("xp_multiplier") * 100) + "%");
+			if (ConfigHelper.getBoolean("xp_boost_enable_level_threshold"))
 				tooltip.add(TextFormatting.ITALIC + "" + TextFormatting.YELLOW
 						+ "The talisman is disabled when your level is below "
-						+ Beneficium.XP_BOOST_ENABLE_LEVEL_THRESHOLD_VALUE);
+						+ ConfigHelper.getInt("xp_boost_enable_level_threshold_value"));
 			break;
 		case 1:
 			tooltip.add(TextFormatting.GRAY + "" + TextFormatting.ITALIC
 					+ "A lens made of an unknown material to concentrate the light of wisdom itself. This holy artifact has been bound to a charm.");
 			tooltip.add(TextFormatting.LIGHT_PURPLE + "Increases XP earned from XP orbs to "
-					+ (int) (Beneficium.XP_MULTIPLIER_DIVINE * 100) + "%");
-			if (Beneficium.XP_BOOST_ENABLE_LEVEL_THRESHOLD)
+					+ (int) (ConfigHelper.getFloat("xp_multiplier_divine") * 100) + "%");
+			if (ConfigHelper.getBoolean("xp_boost_enable_level_threshold"))
 				tooltip.add(TextFormatting.ITALIC + "" + TextFormatting.YELLOW
 						+ "The talisman is disabled when your level is below "
-						+ Beneficium.XP_BOOST_ENABLE_LEVEL_THRESHOLD_VALUE);
+						+ ConfigHelper.getInt("xp_boost_enable_level_threshold_value"));
 			break;
 		}
 	}

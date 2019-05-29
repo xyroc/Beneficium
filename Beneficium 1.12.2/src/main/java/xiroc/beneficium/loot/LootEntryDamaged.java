@@ -1,4 +1,4 @@
-package xiroc.beneficium.util;
+package xiroc.beneficium.loot;
 
 import java.util.Collection;
 import java.util.Random;
