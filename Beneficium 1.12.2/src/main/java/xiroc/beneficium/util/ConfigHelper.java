@@ -63,19 +63,23 @@ public class ConfigHelper {
 				"The xp multiplier for the basic talisman."));
 		cache.put("xp_multiplier_divine", config.getFloat("xp_multiplier_divine", "xp_multipliers", 15.0F, 1.0F, 8192F,
 				"The xp multiplier for the divine talisman."));
-		// WEIGHT_DIVINE_TALISMAN = config.getInt("WEIGHT_DIVINE_TALISMAN", "loot", 5,
-		// 1, 50, "The loot weight for the divine talisman");
 		cache.put("xp_boost_enable_level_threshold", config.getBoolean("xp_boost_enable_level_threshold",
 				"xp_multipliers", false,
 				"If set to true, the talismans will be inactive when the players level is below xp_boost_enable_level_threshold_value"));
 		cache.put("xp_boost_enable_level_threshold_value", config.getInt("xp_boost_enable_level_threshold_value",
 				"xp_multipliers", 10, 1, 128, "The xp threshold value for the talismans"));
+		cache.put("artifact_pickaxe_active_duration", config.getInt("artifact_pickaxe_active_duration", "tools", 1200,
+				0, 72000, "The duration of the artifact pickaxe active in ticks (1 second = 20 ticks)"));
+		cache.put("artifact_pickaxe_active_cooldown", config.getInt("artifact_pickaxe_cooldown", "tools", 6000, 0,
+				72000, "The cooldown for the artifact pickaxe active in ticks (1 second = 20 ticks)"));
 		if (config.hasChanged())
 			config.save();
 		loaded = true;
 	}
 
-	//Dump the config cache to the console
+	/**
+	 * Dumps the config cache to the console
+	 */
 	public static void dump() {
 		Beneficium.logger.info("### Config Cache Dump ###");
 		Iterator<Entry<String, Object>> iterator = cache.entrySet().iterator();
@@ -83,7 +87,15 @@ public class ConfigHelper {
 			Entry<String, Object> entry = iterator.next();
 			Beneficium.logger.info(entry.getKey() + " = " + entry.getValue());
 		}
-		Beneficium.logger.info("### End Config Cache Dump ###");
+		Beneficium.logger.info("### End of Config Cache Dump ###");
 	}
-	
+
+	public static void merge(HashMap<String, Object> cache) {
+		Iterator<Entry<String, Object>> iterator = cache.entrySet().iterator();
+		while (iterator.hasNext()) {
+			Entry<String, Object> entry = iterator.next();
+			ConfigHelper.cache.put(entry.getKey(), entry.getValue());
+		}
+	}
+
 }

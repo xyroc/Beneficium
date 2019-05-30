@@ -1,6 +1,5 @@
 package xiroc.beneficium.network;
 
-import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -10,13 +9,13 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import io.netty.buffer.ByteBuf;
-import net.minecraft.network.INetHandler;
-import net.minecraft.network.Packet;
-import net.minecraft.network.PacketBuffer;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
+import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import xiroc.beneficium.Beneficium;
 import xiroc.beneficium.util.ConfigHelper;
 
-public class PacketServerConfig implements Packet<INetHandler> {
+public class PacketServerConfig implements IMessage {
 
 	HashMap<String, Object> cache;
 
@@ -27,11 +26,13 @@ public class PacketServerConfig implements Packet<INetHandler> {
 	}
 
 	@Override
-	public void readPacketData(PacketBuffer buf) throws IOException {
+	public void fromBytes(ByteBuf buf) {
 		Gson gson = new GsonBuilder().create();
 		cache = new HashMap();
-		for (int i = 0; i < buf.readInt(); i++) {
-			String[] arg = buf.readCharSequence((int) buf.readShort(), Charset.forName("UTF-8")).toString().split("%%");
+		int count = buf.readInt();
+		for (int i = 0; i < count; i++) {
+			int s = (int) buf.readShort();
+			String[] arg = buf.readCharSequence(s, Charset.forName("UTF-8")).toString().split("%%");
 			try {
 				cache.put(arg[0], gson.fromJson(arg[2], Class.forName(arg[1])));
 			} catch (Exception e) {
@@ -42,7 +43,7 @@ public class PacketServerConfig implements Packet<INetHandler> {
 	}
 
 	@Override
-	public void writePacketData(PacketBuffer buf) throws IOException {
+	public void toBytes(ByteBuf buf) {
 		Gson gson = new GsonBuilder().create();
 		Iterator<Entry<String, Object>> iterator = this.cache.entrySet().iterator();
 		Iterator<Entry<String, Object>> iterator2 = this.cache.entrySet().iterator();
@@ -61,11 +62,15 @@ public class PacketServerConfig implements Packet<INetHandler> {
 		}
 	}
 
-	@Override
-	public void processPacket(INetHandler handler) {
-		ConfigHelper.loaded = true;
-		ConfigHelper.cache = this.cache;
-		ConfigHelper.dump();
+	public static class PacketHandlerServerConfig implements IMessageHandler<PacketServerConfig, IMessage> {
+
+		@Override
+		public IMessage onMessage(PacketServerConfig message, MessageContext ctx) {
+			ConfigHelper.loaded = true;
+			ConfigHelper.merge(message.cache);
+			return null;
+		}
+
 	}
 
 }

@@ -15,11 +15,14 @@ import baubles.common.network.PacketOpenBaublesInventory;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.EnumPacketDirection;
 import net.minecraft.network.INetHandler;
+import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.network.handshake.client.C00Handshake;
@@ -38,18 +41,20 @@ import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerPickupXpEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.PlayerTickEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent.ServerConnectionFromClientEvent;
 import xiroc.beneficium.Beneficium;
 import xiroc.beneficium.item.ItemArtifactPickaxe;
 import xiroc.beneficium.loot.LootEntryDamaged;
 import xiroc.beneficium.network.PacketServerConfig;
+import xiroc.beneficium.network.PacketServerConfig;
 
 public class EventManager {
 
 	@SubscribeEvent
 	public void registerBlocks(RegistryEvent.Register<Block> event) {
-
 	}
 
 	@SubscribeEvent
@@ -134,64 +139,20 @@ public class EventManager {
 		}
 		}
 	}
-	
+
 	@SubscribeEvent
-	public void onJoin(ServerConnectionFromClientEvent event) {
-		//event.getManager().sendPacket
-		Beneficium.logger.info("ServerConnectionFromClientEvent got fired!");
-		event.getManager().sendPacket(new Packet<INetHandler>() {
-			
-			HashMap<String, Object> cache = ConfigHelper.cache;
-			
-			@Override
-			public void readPacketData(PacketBuffer buf) throws IOException {
-				Gson gson = new GsonBuilder().create();
-				cache = new HashMap();
-				for (int i = 0; i < buf.readInt(); i++) {
-					String[] arg = buf.readCharSequence((int) buf.readShort(), Charset.forName("UTF-8")).toString().split("%%");
-					try {
-						cache.put(arg[0], gson.fromJson(arg[2], Class.forName(arg[1])));
-					} catch (Exception e) {
-						Beneficium.logger.error("Failed to load the server config.");
-						e.printStackTrace();
-					}
-				}
-			}
-
-			@Override
-			public void writePacketData(PacketBuffer buf) throws IOException {
-				Gson gson = new GsonBuilder().create();
-				Iterator<Entry<String, Object>> iterator = this.cache.entrySet().iterator();
-				Iterator<Entry<String, Object>> iterator2 = this.cache.entrySet().iterator();
-				int count = 0;
-				while (iterator2.hasNext()) {
-					iterator2.next();
-					count++;
-				}
-				buf.writeInt(count);
-				while (iterator.hasNext()) {
-					Entry<String, Object> entry = iterator.next();
-					String data = entry.getKey() + "%%" + entry.getValue().getClass().getTypeName() + "%%"
-							+ gson.toJson(entry.getValue());
-					buf.writeShort((short) data.length());
-					buf.writeCharSequence(data, Charset.forName("UTF-8"));
-				}
-			}
-
-			@Override
-			public void processPacket(INetHandler handler) {
-				ConfigHelper.loaded = true;
-				ConfigHelper.cache = this.cache;
-				ConfigHelper.dump();
-			}
-		});
+	public void onJoin(PlayerLoggedInEvent event) {
+		Beneficium.logger.info("Sending Config Packet");
+		Beneficium.NET.sendTo(new PacketServerConfig(ConfigHelper.cache), (EntityPlayerMP) event.player);
 	}
 
 	@SubscribeEvent
 	public void onTick(PlayerTickEvent event) {
-		NBTTagCompound nbt = event.player.getEntityData();
-		if (ItemArtifactPickaxe.hasCooldown(nbt))
-			nbt.setInteger("artifact_pickaxe_cooldown", nbt.getInteger("artifact_pickaxe_cooldown") - 1);
+		if (event.phase == TickEvent.Phase.START && !event.player.world.isRemote) {
+			NBTTagCompound nbt = event.player.getEntityData();
+			if (ItemArtifactPickaxe.getCooldown(nbt) > 0)
+				nbt.setInteger("artifact_pickaxe_cooldown", nbt.getInteger("artifact_pickaxe_cooldown") - 1);
+		}
 	}
 
 	@SubscribeEvent
@@ -206,7 +167,7 @@ public class EventManager {
 					&& event.getEntityPlayer().experienceLevel < ConfigHelper
 							.getInt("xp_boost_enable_level_threshold_value"))
 				return;
-			long xp = (long) (ConfigHelper.getInt("xp_boost_enable_level_threshold_value") * event.getOrb().xpValue);
+			long xp = (long) (ConfigHelper.getInt("xp_multiplier") * event.getOrb().xpValue);
 			if (xp > Integer.MAX_VALUE) {
 				Beneficium.logger.warn("The multiplied exp exceeds the maximum value! Returning Integer.MAX_VALUE");
 				xp = Integer.MAX_VALUE;
