@@ -48,6 +48,7 @@ import net.minecraftforge.fml.common.network.FMLNetworkEvent.ServerConnectionFro
 import xiroc.beneficium.Beneficium;
 import xiroc.beneficium.item.ItemArtifactPickaxe;
 import xiroc.beneficium.loot.LootEntryDamaged;
+import xiroc.beneficium.loot.LootPoolItem;
 import xiroc.beneficium.network.PacketServerConfig;
 import xiroc.beneficium.network.PacketServerConfig;
 
@@ -55,6 +56,7 @@ public class EventManager {
 
 	@SubscribeEvent
 	public void registerBlocks(RegistryEvent.Register<Block> event) {
+		// Nothing here atm ;)
 	}
 
 	@SubscribeEvent
@@ -79,61 +81,80 @@ public class EventManager {
 	@SubscribeEvent
 	public void loadloot(LootTableLoadEvent event) {
 		// minecraft:chests/stronghold_corridor, minecraft:chests/stronghold_crossing,
-		// chests/simple_dungeon, minecraft:chests/nether_bridge,
+		// minecraft:chests/simple_dungeon, minecraft:chests/nether_bridge,
 		// minecraft:chests/abandoned_mineshaft, minecraft:chests/jungle_temple,
 		// minecraft:chests/desert_pyramid, minecraft:chests/village_blacksmith
 		switch (event.getName().toString()) {
 		case "minecraft:chests/stronghold_corridor": {
 			Beneficium.logger.info("Modifying LootTable: " + event.getName().toString());
-			LootEntryDamaged talisman = new LootEntryDamaged(Beneficium.talismanOfTheBenefactor, 1, 1,
-					new LootFunction[0], new LootCondition[0], 1, "beneficium:divine_talisman");
-			LootPool pool = new LootPool(new LootEntry[] { talisman }, new LootCondition[0], new RandomValueRange(1),
-					new RandomValueRange(0, 0), "beneficium:divine_talisman_pool");
+			LootPoolItem pool = new LootPoolItem(
+					new LootEntry[] { new LootEntryDamaged(Beneficium.talismanOfTheBenefactor, 1, 1,
+							new LootFunction[0], new LootCondition[0], 1, "beneficium:divine_talisman") },
+					new LootCondition[0], new RandomValueRange(0), new RandomValueRange(0),
+					new ItemStack(Beneficium.talismanOfTheBenefactor, 1, 1), new RandomValueRange(1), ConfigHelper.getFloat("divine_talisman_loot_chance"),
+					"beneficium:talisman");
 			event.getTable().addPool(pool);
 			break;
 		}
 		case "minecraft:chests/stronghold_crossing": {
 			Beneficium.logger.info("Modifying LootTable: " + event.getName().toString());
-			LootEntryItem obsidian = new LootEntryItem(Item.getItemFromBlock(Blocks.OBSIDIAN), 1, 1,
-					new LootFunction[0], new LootCondition[0], "beneficium:divine_talisman");
-			LootPool pool = new LootPool(new LootEntry[] { obsidian }, new LootCondition[0], new RandomValueRange(1),
-					new RandomValueRange(0, 0), "beneficium:divine_talisman_pool");
+			LootPoolItem pool = new LootPoolItem(
+					new LootEntry[] { new LootEntryDamaged(Beneficium.talismanOfTheBenefactor, 1, 1,
+							new LootFunction[0], new LootCondition[0], 1, "beneficium:divine_talisman") },
+					new LootCondition[0], new RandomValueRange(0), new RandomValueRange(0),
+					new ItemStack(Beneficium.talismanOfTheBenefactor, 1, 1), new RandomValueRange(1), ConfigHelper.getFloat("divine_talisman_loot_chance"),
+					"beneficium:talisman");
 			event.getTable().addPool(pool);
 			break;
 		}
 		case "minecraft:chests/simple_dungeon": {
 			Beneficium.logger.info("Modifying LootTable: " + event.getName().toString());
-			LootEntryDamaged talisman = new LootEntryDamaged(Beneficium.talismanOfTheBenefactor, 1, 1,
-					new LootFunction[0], new LootCondition[0], 1, "beneficium:divine_talisman");
-			LootPool pool = new LootPool(new LootEntry[] { talisman }, new LootCondition[0], new RandomValueRange(1),
-					new RandomValueRange(0, 0), "beneficium:divine_talisman_pool");
+			LootPoolItem pool = new LootPoolItem(
+					new LootEntry[] { new LootEntryDamaged(Beneficium.talismanOfTheBenefactor, 1, 1,
+							new LootFunction[0], new LootCondition[0], 1, "beneficium:divine_talisman") },
+					new LootCondition[0], new RandomValueRange(0), new RandomValueRange(0),
+					new ItemStack(Beneficium.talismanOfTheBenefactor, 1, 1), new RandomValueRange(1), ConfigHelper.getFloat("divine_talisman_loot_chance"),
+					"beneficium:talisman");
 			event.getTable().addPool(pool);
 			break;
 		}
 		case "minecraft:chests/nether_bridge": {
 			Beneficium.logger.info("Modifying LootTable: " + event.getName().toString());
-			LootEntryDamaged talisman = new LootEntryDamaged(Beneficium.talismanOfTheBenefactor, 1, 1,
-					new LootFunction[0], new LootCondition[0], 1, "beneficium:divine_talisman");
-			LootPool pool = new LootPool(new LootEntry[] { talisman }, new LootCondition[0], new RandomValueRange(1),
-					new RandomValueRange(0, 0), "beneficium:divine_talisman_pool");
+			LootPoolItem pool = new LootPoolItem(
+					new LootEntry[] { new LootEntryDamaged(Beneficium.talismanOfTheBenefactor, 1, 1,
+							new LootFunction[0], new LootCondition[0], 1, "beneficium:divine_talisman") },
+					new LootCondition[0], new RandomValueRange(0), new RandomValueRange(0),
+					new ItemStack(Beneficium.talismanOfTheBenefactor, 1, 1), new RandomValueRange(1), ConfigHelper.getFloat("divine_talisman_loot_chance"),
+					"beneficium:talisman");
 			event.getTable().addPool(pool);
 			break;
 		}
 		case "minecraft:chests/jungle_temple": {
 			Beneficium.logger.info("Modifying LootTable: " + event.getName().toString());
-			LootEntryDamaged talisman = new LootEntryDamaged(Beneficium.talismanOfTheBenefactor, 1, 1,
-					new LootFunction[0], new LootCondition[0], 1, "beneficium:divine_talisman");
-			LootPool pool = new LootPool(new LootEntry[] { talisman }, new LootCondition[0], new RandomValueRange(1),
-					new RandomValueRange(0, 0), "beneficium:divine_talisman_pool");
+			LootPoolItem pool = new LootPoolItem(
+					new LootEntry[] { new LootEntryDamaged(Beneficium.talismanOfTheBenefactor, 1, 1,
+							new LootFunction[0], new LootCondition[0], 1, "beneficium:divine_talisman") },
+					new LootCondition[0], new RandomValueRange(0), new RandomValueRange(0),
+					new ItemStack(Beneficium.talismanOfTheBenefactor, 1, 1), new RandomValueRange(1), ConfigHelper.getFloat("divine_talisman_loot_chance"),
+					"beneficium:talisman");
 			event.getTable().addPool(pool);
+			LootPoolItem poolArtifactPickaxe = new LootPoolItem(
+					new LootEntry[] { new LootEntryDamaged(Beneficium.artifactPickaxe, 1, 0,
+							new LootFunction[0], new LootCondition[0], 1, "beneficium:artifact_pickaxe") },
+					new LootCondition[0], new RandomValueRange(0), new RandomValueRange(0),
+					new ItemStack(Beneficium.artifactPickaxe), new RandomValueRange(1), ConfigHelper.getFloat("artifact_pickaxe_loot_chance"),
+					"beneficium:artifact_pickaxe");
+			event.getTable().addPool(poolArtifactPickaxe);
 			break;
 		}
 		case "minecraft:chests/stronghold_library": {
 			Beneficium.logger.info("Modifying LootTable: " + event.getName().toString());
-			LootEntryDamaged talisman = new LootEntryDamaged(Beneficium.talismanOfTheBenefactor, 1, 1,
-					new LootFunction[0], new LootCondition[0], 1, "beneficium:divine_talisman");
-			LootPool pool = new LootPool(new LootEntry[] { talisman }, new LootCondition[0], new RandomValueRange(1),
-					new RandomValueRange(0, 0), "beneficium:divine_talisman_pool");
+			LootPoolItem pool = new LootPoolItem(
+					new LootEntry[] { new LootEntryDamaged(Beneficium.talismanOfTheBenefactor, 1, 1,
+							new LootFunction[0], new LootCondition[0], 1, "beneficium:divine_talisman") },
+					new LootCondition[0], new RandomValueRange(0), new RandomValueRange(0),
+					new ItemStack(Beneficium.talismanOfTheBenefactor, 1, 1), new RandomValueRange(1), ConfigHelper.getFloat("divine_talisman_loot_chance"),
+					"beneficium:talisman");
 			event.getTable().addPool(pool);
 			break;
 		}
@@ -167,7 +188,7 @@ public class EventManager {
 					&& event.getEntityPlayer().experienceLevel < ConfigHelper
 							.getInt("xp_boost_enable_level_threshold_value"))
 				return;
-			long xp = (long) (ConfigHelper.getInt("xp_multiplier") * event.getOrb().xpValue);
+			long xp = (long) (ConfigHelper.getFloat("xp_multiplier") * event.getOrb().xpValue);
 			if (xp > Integer.MAX_VALUE) {
 				Beneficium.logger.warn("The multiplied exp exceeds the maximum value! Returning Integer.MAX_VALUE");
 				xp = Integer.MAX_VALUE;

@@ -1,7 +1,7 @@
 {
     "parent": "item/generated",
     "textures": {
-        "layer0":"beneficium:items/talisman_32"
+        "layer0":"beneficium:items/talisman"
     },
     "overrides": [
         { "predicate": { "type": 1 }, "model": "beneficium:item/divine_talisman" }

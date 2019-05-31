@@ -66,6 +66,7 @@ public class PacketServerConfig implements IMessage {
 
 		@Override
 		public IMessage onMessage(PacketServerConfig message, MessageContext ctx) {
+			Beneficium.logger.info("Loading Server Config");
 			ConfigHelper.loaded = true;
 			ConfigHelper.merge(message.cache);
 			return null;
