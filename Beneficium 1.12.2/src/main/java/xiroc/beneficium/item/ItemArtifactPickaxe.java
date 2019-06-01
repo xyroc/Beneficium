@@ -34,7 +34,12 @@ import xiroc.beneficium.util.ConfigHelper;
 public class ItemArtifactPickaxe extends ItemPickaxe {
 
 	public ItemArtifactPickaxe() {
-		super(EnumHelper.addToolMaterial("artifact", 10, 7500, 15F, 3.5F, 10));
+		super(EnumHelper.addToolMaterial(ConfigHelper.getString("artifact_pickaxe_material_name"),
+				ConfigHelper.getInt("artifact_pickaxe_harvest_level"),
+				ConfigHelper.getInt("artifact_pickaxe_durability"),
+				ConfigHelper.getFloat("artifact_pickaxe_efficiency"),
+				ConfigHelper.getFloat("artifact_pickaxe_attack_damage"),
+				ConfigHelper.getInt("artifact_pickaxe_enchantability")));
 		setRegistryName("artifact_pickaxe");
 		setUnlocalizedName("artifact_pickaxe");
 		setCreativeTab(Beneficium.tabBeneficium);
