@@ -1,4 +1,4 @@
-package xiroc.beneficium.network;
+package xiroc.beneficium.common.network;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;

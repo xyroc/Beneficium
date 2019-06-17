@@ -1,4 +1,4 @@
-package xiroc.beneficium.util;
+package xiroc.beneficium.common.util;
 
 import java.io.File;
 import java.io.FileOutputStream;

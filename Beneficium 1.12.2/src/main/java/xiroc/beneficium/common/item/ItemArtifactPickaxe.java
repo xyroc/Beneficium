@@ -1,4 +1,4 @@
-package xiroc.beneficium.item;
+package xiroc.beneficium.common.item;
 
 import java.util.List;
 
@@ -28,8 +28,8 @@ import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.EnumHelper;
 import xiroc.beneficium.Beneficium;
-import xiroc.beneficium.network.PacketSound;
-import xiroc.beneficium.util.ConfigHelper;
+import xiroc.beneficium.common.network.PacketSound;
+import xiroc.beneficium.common.util.ConfigHelper;
 
 public class ItemArtifactPickaxe extends ItemPickaxe {
 

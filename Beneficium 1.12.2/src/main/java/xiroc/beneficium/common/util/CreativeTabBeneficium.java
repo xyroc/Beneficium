@@ -1,9 +1,9 @@
-package xiroc.beneficium.util;
+package xiroc.beneficium.common.util;
 
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import xiroc.beneficium.Beneficium;
+import xiroc.beneficium.common.item.ItemRegistry;
 
 public class CreativeTabBeneficium extends CreativeTabs{
 
@@ -13,7 +13,7 @@ public class CreativeTabBeneficium extends CreativeTabs{
 
 	@Override
 	public ItemStack getTabIconItem() {
-		return new ItemStack(Beneficium.talismanOfTheBenefactor);
+		return new ItemStack(ItemRegistry.talismanOfTheBenefactor);
 	}
 
 }

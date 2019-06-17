@@ -1,0 +1,19 @@
+{
+    "parent": "minecraft:adventure/root",
+	"display": {
+            "icon": {
+                "item": "minecraft:gold_ingot"
+            },
+            "title": {
+                "translate": "advancements.adventure.treasure.title"
+            },
+            "description": {
+                "translate": "advancements.adventure.treasure.description"
+            }
+    },
+	"criteria": {
+	    "find_treasure": {
+		    "trigger": "beneficium:find_treasure"
+		}
+	}
+}

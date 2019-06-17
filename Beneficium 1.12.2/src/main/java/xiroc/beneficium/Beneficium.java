@@ -24,6 +24,7 @@ import net.minecraft.item.ItemPickaxe;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.EnumPacketDirection;
 import net.minecraft.network.NetworkManager;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
@@ -33,6 +34,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.ModMetadata;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.Mod.EventHandler;
+import net.minecraftforge.fml.common.Mod.Instance;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
@@ -41,27 +43,30 @@ import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.common.versioning.ArtifactVersion;
 import net.minecraftforge.fml.relauncher.Side;
-import xiroc.beneficium.item.ItemArtifactPickaxe;
-import xiroc.beneficium.item.ItemTalismanOfTheBenefactor;
-import xiroc.beneficium.network.PacketServerConfig;
-import xiroc.beneficium.network.PacketSound;
-import xiroc.beneficium.util.ConfigHelper;
-import xiroc.beneficium.util.CreativeTabBeneficium;
-import xiroc.beneficium.util.EventManager;
-import xiroc.beneficium.util.NetHelper;
-import xiroc.beneficium.util.Reference;
+import xiroc.beneficium.common.advancement.trigger.TriggerRegistry;
+import xiroc.beneficium.common.block.tileentity.TileEntityTreasureChest;
+import xiroc.beneficium.common.item.ItemArtifactPickaxe;
+import xiroc.beneficium.common.item.ItemTalismanOfTheBenefactor;
+import xiroc.beneficium.common.network.PacketServerConfig;
+import xiroc.beneficium.common.network.PacketSound;
+import xiroc.beneficium.common.util.ConfigHelper;
+import xiroc.beneficium.common.util.CreativeTabBeneficium;
+import xiroc.beneficium.common.util.EventManager;
+import xiroc.beneficium.common.util.GuiHandler;
+import xiroc.beneficium.common.util.NetHelper;
+import xiroc.beneficium.common.util.Reference;
 
 @Mod(modid = Reference.MODID, name = Reference.NAME, version = Reference.VERSION2, acceptedMinecraftVersions = Reference.MC_VERSIONS, dependencies = Reference.DEPENDENCIES)
 public class Beneficium {
+
+	@Instance
+	public static Beneficium beneficium;
 
 	public static final Logger logger = LogManager.getLogger(Reference.NAME);
 
 	public static final SimpleNetworkWrapper NET = NetworkRegistry.INSTANCE.newSimpleChannel(Reference.MODID);
 
 	public static final CreativeTabBeneficium tabBeneficium = new CreativeTabBeneficium();
-
-	public static final Item talismanOfTheBenefactor = new ItemTalismanOfTheBenefactor();
-	public static final ItemPickaxe artifactPickaxe = new ItemArtifactPickaxe();
 
 	public static int packetDiscriminator = 0;
 
@@ -82,11 +87,18 @@ public class Beneficium {
 
 	@EventHandler
 	public void init(FMLInitializationEvent event) {
+		TriggerRegistry.register();
 		if (!ConfigHelper.loaded)
 			ConfigHelper.load();
 		NET.registerMessage(PacketSound.PacketHanderSound.class, PacketSound.class, packetDiscriminator++, Side.CLIENT);
 		NET.registerMessage(PacketServerConfig.PacketHandlerServerConfig.class, PacketServerConfig.class,
 				packetDiscriminator++, Side.CLIENT);
+		NetworkRegistry.INSTANCE.registerGuiHandler(beneficium, new GuiHandler());
+		GameRegistry.registerTileEntity(TileEntityTreasureChest.class, locate("treasure"));
+	}
+	
+	public static ResourceLocation locate(String path) {
+		return new ResourceLocation(Reference.MODID, path);
 	}
 
 	public static boolean isSide(Side side2) {

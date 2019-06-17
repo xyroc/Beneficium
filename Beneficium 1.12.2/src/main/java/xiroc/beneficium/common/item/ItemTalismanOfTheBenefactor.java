@@ -1,4 +1,4 @@
-package xiroc.beneficium.item;
+package xiroc.beneficium.common.item;
 
 import java.util.List;
 
@@ -7,7 +7,7 @@ import baubles.api.IBauble;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.item.IItemPropertyGetter;
 import net.minecraft.item.Item;
@@ -19,7 +19,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import xiroc.beneficium.Beneficium;
-import xiroc.beneficium.util.ConfigHelper;
+import xiroc.beneficium.common.util.ConfigHelper;
 
 public class ItemTalismanOfTheBenefactor extends Item implements IBauble {
 
@@ -107,6 +107,16 @@ public class ItemTalismanOfTheBenefactor extends Item implements IBauble {
 						+ ConfigHelper.getInt("xp_boost_enable_level_threshold_value"));
 			break;
 		}
+	}
+	
+	@Override
+	public void onEquipped(ItemStack itemstack, EntityLivingBase player) {
+		player.playSound(SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, .75F, 1.9f);
+	}
+
+	@Override
+	public void onUnequipped(ItemStack itemstack, EntityLivingBase player) {
+		player.playSound(SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, .75F, 2f);
 	}
 
 	@Override

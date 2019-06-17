@@ -1,4 +1,4 @@
-package xiroc.beneficium.network;
+package xiroc.beneficium.common.network;
 
 import java.nio.charset.Charset;
 import java.util.HashMap;
@@ -13,7 +13,7 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import xiroc.beneficium.Beneficium;
-import xiroc.beneficium.util.ConfigHelper;
+import xiroc.beneficium.common.util.ConfigHelper;
 
 public class PacketServerConfig implements IMessage {
 

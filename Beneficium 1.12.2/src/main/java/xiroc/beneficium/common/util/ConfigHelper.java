@@ -1,4 +1,4 @@
-package xiroc.beneficium.util;
+package xiroc.beneficium.common.util;
 
 import java.io.File;
 import java.util.HashMap;
@@ -76,7 +76,6 @@ public class ConfigHelper {
 		cache.put("divine_talisman_loot_chance", config.getFloat("divine_talisman_loot_chance", "loot", 0.05F, 0.0F, 1.0F, "The chance of the divine talisman being generated in a chest. (0.01 = 1%"));
 		if (config.hasChanged())
 			config.save();
-		dump();
 		loaded = true;
 	}
 
