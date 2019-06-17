@@ -13,7 +13,7 @@ import net.minecraft.world.storage.loot.functions.LootFunction;
 
 public class LootEntryDamaged extends LootEntryItem {
 
-	int damage;
+	public int damage;
 
 	public LootEntryDamaged(Item itemIn, int weightIn, int qualityIn, LootFunction[] functionsIn,
 			LootCondition[] conditionsIn, int damage, String entryName) {
@@ -25,13 +25,13 @@ public class LootEntryDamaged extends LootEntryItem {
 	public void addLoot(Collection<ItemStack> stacks, Random rand, LootContext context) {
 		ItemStack itemstack = new ItemStack(this.item);
 		itemstack.setItemDamage(damage);
-
+		
 		for (LootFunction lootfunction : this.functions) {
 			if (LootConditionManager.testAllConditions(lootfunction.getConditions(), rand, context)) {
 				itemstack = lootfunction.apply(itemstack, rand, context);
 			}
 		}
-
+		
 		if (!itemstack.isEmpty()) {
 			if (itemstack.getCount() < this.item.getItemStackLimit(itemstack)) {
 				stacks.add(itemstack);

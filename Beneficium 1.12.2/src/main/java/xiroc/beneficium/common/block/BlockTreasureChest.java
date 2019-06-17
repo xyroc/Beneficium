@@ -41,7 +41,6 @@ import xiroc.beneficium.common.util.GuiHandler;
 
 public class BlockTreasureChest extends BlockContainer {
 
-	// BlockChest
 	public static final PropertyDirection FACING = BlockHorizontal.FACING;
 	public static final AxisAlignedBB CHEST_AABB = new AxisAlignedBB(0.0625D, 0.0D, 0.0625D, 0.9375D, 0.875D, 0.9375D);
 
@@ -52,11 +51,7 @@ public class BlockTreasureChest extends BlockContainer {
 		this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));
 		this.setCreativeTab(Beneficium.tabBeneficium);
 		this.setSoundType(SoundType.WOOD);
-	}
-
-	@Override
-	public int getLightValue(IBlockState state, IBlockAccess world, BlockPos pos) {
-		return Math.max(super.getLightValue(state, world, pos), 8);
+		this.setHardness(2.0F);
 	}
 
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {

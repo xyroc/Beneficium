@@ -2,15 +2,16 @@
   "forge_marker": 1,
   "defaults": {
     "textures": {
+	  "all": "blocks/planks_oak",
 	  "particle": "blocks/planks_oak"
     }
   },
   "variants": {
-    "normal": [{"model": "beneficium:treasure"}],
+    "normal": [{"model": "beneficium:treasure_default"}],
     "inventory": [{"model": "beneficium:treasure"}],
-    "facing=east":[{"model": "beneficium:treasure"}],
-    "facing=west":[{"model": "beneficium:treasure"}],
-    "facing=south":[{"model": "beneficium:treasure"}],
-    "facing=north":[{"model": "beneficium:treasure"}]
+    "facing=east":[{"model": "beneficium:treasure_default"}],
+    "facing=west":[{"model": "beneficium:treasure_default"}],
+    "facing=south":[{"model": "beneficium:treasure_default"}],
+    "facing=north":[{"model": "beneficium:treasure_default"}]
   }
 }

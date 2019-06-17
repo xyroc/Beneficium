@@ -18,6 +18,7 @@ import io.netty.util.Attribute;
 import io.netty.util.AttributeKey;
 import io.netty.util.concurrent.EventExecutor;
 import net.minecraft.client.Minecraft;
+import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemPickaxe;
@@ -96,7 +97,7 @@ public class Beneficium {
 		NetworkRegistry.INSTANCE.registerGuiHandler(beneficium, new GuiHandler());
 		GameRegistry.registerTileEntity(TileEntityTreasureChest.class, locate("treasure"));
 	}
-	
+
 	public static ResourceLocation locate(String path) {
 		return new ResourceLocation(Reference.MODID, path);
 	}
