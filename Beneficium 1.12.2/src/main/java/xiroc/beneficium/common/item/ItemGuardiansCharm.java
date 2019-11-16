@@ -4,6 +4,7 @@ import java.util.List;
 
 import baubles.api.BaubleType;
 import baubles.api.IBauble;
+import net.minecraft.client.gui.GuiCreateWorld;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.MobEffects;
@@ -12,6 +13,7 @@ import net.minecraft.item.EnumRarity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import xiroc.beneficium.Beneficium;
 
@@ -45,6 +47,8 @@ public class ItemGuardiansCharm extends Item implements IBauble {
 	@Override
 	public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
 		super.addInformation(stack, worldIn, tooltip, flagIn);
+		tooltip.add(TextFormatting.LIGHT_PURPLE
+				+ "Grants regeneration and resistance if the bearer's health drops below 5 hp");
 	}
 
 	@Override

@@ -26,19 +26,4 @@ public class NetHelper {
 		}
 	}
 
-	public static void downloadResourcePack() {
-		new Thread(new Runnable() {
-			@Override
-			public void run() {
-				Beneficium.logger.info("Downloading the alternative talisman texture pack");
-				try {
-					downloadToFile(new URL(resourcePackURL),
-							Loader.instance().getConfigDir() + "/../resourcepacks/AlternativeTalismanTextures.zip");
-				} catch (Exception e) {
-					Beneficium.logger.warn("Failed to download the alternative talisman texture pack: " + e.getMessage());
-				}
-			}
-		}, "Benficium Downloader").start();
-	}
-
 }

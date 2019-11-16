@@ -11,6 +11,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityLockableLoot;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.SoundCategory;
@@ -24,8 +25,9 @@ import xiroc.beneficium.Beneficium;
 import xiroc.beneficium.common.advancement.trigger.TriggerRegistry;
 import xiroc.beneficium.common.block.BlockTreasureChest;
 import xiroc.beneficium.common.container.ContainerTreasureChest;
+import xiroc.beneficium.common.util.GuiHandler;
 
-public class TileEntityTreasureChest extends TileEntity implements IInventory, ITickable {
+public class TileEntityTreasureChest extends TileEntityLockableLoot implements IInventory, ITickable {
 
 	private NonNullList<ItemStack> chestContents = NonNullList.<ItemStack>withSize(this.getSizeInventory(),
 			ItemStack.EMPTY);
@@ -199,7 +201,7 @@ public class TileEntityTreasureChest extends TileEntity implements IInventory, I
 		return false;
 	}
 
-	@Override
+	/*@Override
 	public ItemStack getStackInSlot(int index) {
 		return chestContents.get(index);
 	}
@@ -223,11 +225,11 @@ public class TileEntityTreasureChest extends TileEntity implements IInventory, I
 	@Override
 	public void setInventorySlotContents(int index, ItemStack stack) {
 		chestContents.set(index, stack);
-	}
+	}*/
 
 	@Override
 	public boolean isUsableByPlayer(EntityPlayer player) {
-		return true;
+		return super.isUsableByPlayer(player);
 	}
 
 	@Override
@@ -251,12 +253,17 @@ public class TileEntityTreasureChest extends TileEntity implements IInventory, I
 
 	@Override
 	public void clear() {
-		chestContents.clear();
+		super.clear();
 	}
 
 	@Override
 	public String getName() {
 		return "Treasure Chest";
+	}
+
+	@Override
+	public String getGuiID() {
+		return "beneficium:treasure_chest";
 	}
 
 }

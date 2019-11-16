@@ -58,12 +58,10 @@ public class ConfigHelper {
 		Beneficium.logger.info("Loading the configuration file");
 		config = new Configuration(new File(Loader.instance().getConfigDir(), "Beneficium.cfg"));
 		config.load();
-		if(Beneficium.isSide(Side.CLIENT))
-			cache.put("download_alternative_talisman_texturepack", config.getBoolean("download_alternative_talisman_texturepack", "misc", false, "Determines if the alternative talisman texturepack should be downloaded on game launch."));
 		cache.put("xp_multiplier", config.getFloat("xp_multiplier_base", "xp_multipliers", 5.0F, 1.0F, 8192F, "The xp multiplier for the basic talisman."));
 		cache.put("xp_multiplier_divine", config.getFloat("xp_multiplier_divine", "xp_multipliers", 15.0F, 1.0F, 8192F, "The xp multiplier for the divine talisman."));
 		cache.put("xp_boost_enable_level_threshold", config.getBoolean("xp_boost_enable_level_threshold", "xp_multipliers", false, "If set to true, the talismans will be inactive when the players level is below xp_boost_enable_level_threshold_value"));
-		cache.put("xp_boost_enable_level_threshold_value", config.getInt("xp_boost_enable_level_threshold_value", "xp_multipliers", 10, 1, 128, "The xp threshold value for the talismans"));
+		cache.put("xp_boost_enable_level_threshold_value", config.getInt("xp_boost_enable_level_threshold_value", "xp_multipliers", 10, 1, 256, "The xp threshold value for the talismans"));
 		cache.put("artifact_pickaxe_material_name", config.getString("artifact_pickaxe_material_name", "tools", "artifact", "The name of the artifact pickaxe's tool material"));
 		cache.put("artifact_pickaxe_harvest_level", config.getInt("artifact_pickaxe_harvest_level", "tools", 10, 0, 100000, "The harvest level of the artifact pickaxe"));
 		cache.put("artifact_pickaxe_durability", config.getInt("artifact_pickaxe_durability", "tools", 7500, 0, 100000, "The durability of the artifact pickaxe"));
@@ -74,6 +72,7 @@ public class ConfigHelper {
 		cache.put("artifact_pickaxe_active_cooldown", config.getInt("artifact_pickaxe_cooldown", "tools", 6000, 0, 72000, "The cooldown for the artifact pickaxe active in ticks (1 second = 20 ticks)"));
 		cache.put("artifact_pickaxe_loot_chance", config.getFloat("artifact_pickaxe_loot_chance", "loot", 0.1F, 0.0F, 1.0F, "The chance of the artifact pickaxe being generated in a jungle temple chest. (0.01 = 1%"));
 		cache.put("divine_talisman_loot_chance", config.getFloat("divine_talisman_loot_chance", "loot", 0.05F, 0.0F, 1.0F, "The chance of the divine talisman being generated in a chest. (0.01 = 1%"));
+		cache.put("generate_treasure", config.getBoolean("generate_treasure", "worldgen", true, "Determines if treasure chests should be generated in the overworld."));
 		if (config.hasChanged())
 			config.save();
 		loaded = true;

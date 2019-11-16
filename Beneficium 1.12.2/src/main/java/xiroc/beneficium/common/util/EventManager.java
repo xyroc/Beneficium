@@ -1,39 +1,38 @@
 package xiroc.beneficium.common.util;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Map;
+import java.io.File;
 
 import baubles.api.BaublesApi;
 import baubles.api.cap.IBaublesItemHandler;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.client.renderer.block.statemap.IStateMapper;
 import net.minecraft.client.renderer.block.statemap.StateMapperBase;
-import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
 import net.minecraft.world.storage.loot.LootEntry;
 import net.minecraft.world.storage.loot.RandomValueRange;
 import net.minecraft.world.storage.loot.conditions.LootCondition;
 import net.minecraft.world.storage.loot.functions.LootFunction;
-import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.event.LootTableLoadEvent;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.entity.player.PlayerPickupXpEvent;
+import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
+import net.minecraftforge.fml.common.Loader;
+import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.PlayerTickEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import xiroc.beneficium.Beneficium;
 import xiroc.beneficium.client.render.tileentity.TileEntityTreasureChestRenderer;
 import xiroc.beneficium.common.block.BlockRegistry;
@@ -42,6 +41,7 @@ import xiroc.beneficium.common.item.ItemArtifactPickaxe;
 import xiroc.beneficium.common.item.ItemRegistry;
 import xiroc.beneficium.common.loot.LootEntryDamaged;
 import xiroc.beneficium.common.loot.LootPoolItem;
+import xiroc.beneficium.common.loot.TreasurePositionFile;
 import xiroc.beneficium.common.network.PacketServerConfig;
 
 public class EventManager {
@@ -49,9 +49,6 @@ public class EventManager {
 	@SubscribeEvent
 	public void registerBlocks(RegistryEvent.Register<Block> event) {
 		event.getRegistry().register(BlockRegistry.treasure);
-
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityTreasureChest.class,
-				new TileEntityTreasureChestRenderer());
 	}
 
 	@SubscribeEvent
@@ -62,34 +59,29 @@ public class EventManager {
 		event.getRegistry().register(ItemRegistry.guardiansCharm);
 	}
 
+//	@SubscribeEvent
+//	public void registerRenderers(ModelRegistryEvent event) {
+//		
+//
+//	}
+
 	@SubscribeEvent
-	public void registerRenderers(ModelRegistryEvent event) {
-		ModelLoader.setCustomStateMapper(BlockRegistry.treasure, new StateMapperBase() {
-			@Override
-			public ModelResourceLocation getModelResourceLocation(IBlockState state) {
-				return new ModelResourceLocation("beneficium:treasure");
-			}
-		});
-
-		ModelLoader.setCustomModelResourceLocation(ItemRegistry.talismanOfTheBenefactor, 0,
-				new ModelResourceLocation(Beneficium.locate("talisman"), "inventory"));
-		ModelLoader.setCustomModelResourceLocation(ItemRegistry.talismanOfTheBenefactor, 1,
-				new ModelResourceLocation(Beneficium.locate("talisman"), "inventory"));
-
-		ModelLoader.setCustomModelResourceLocation(ItemRegistry.artifactPickaxe, 0,
-				new ModelResourceLocation(Beneficium.locate("artifact_pickaxe"), "inventory"));
-		ModelLoader.setCustomModelResourceLocation(ItemRegistry.artifactPickaxe, 1,
-				new ModelResourceLocation(Beneficium.locate("artifact_pickaxe"), "inventory"));
-
-		ModelLoader.setCustomModelResourceLocation(ItemRegistry.guardiansCharm, 0,
-				new ModelResourceLocation(Beneficium.locate("guardians_charm"), "inventory"));
-
-		ModelLoader.setCustomModelResourceLocation(ItemRegistry.treasure, 0,
-				new ModelResourceLocation(Beneficium.locate("treasure"), "inventory"));
+	public void onWorldLoad(WorldEvent.Load event) {
+		World world = event.getWorld();
+		if (world.isRemote)
+			return;
+		if (TreasurePositionFile.files.get(world) == null)
+			new TreasurePositionFile(world, new File(world.getSaveHandler().getWorldDirectory(),
+					"treasurePositions/" + world.provider.getDimensionType().getName() + ".txt"));
 	}
 
 	@SubscribeEvent
-	public void onModelBake(ModelBakeEvent event) {
+	public void onWorldSave(WorldEvent.Save event) {
+		World world = event.getWorld();
+		if (world.isRemote)
+			return;
+		if (TreasurePositionFile.files.get(world) != null)
+			TreasurePositionFile.files.get(world).write();
 	}
 
 	@SubscribeEvent
@@ -239,6 +231,37 @@ public class EventManager {
 			}
 		}
 		return level;
+	}
+	
+	@SideOnly(Side.CLIENT)
+	public static class ClientEventManager {
+		
+		@SubscribeEvent
+		public void onModelRegistry(ModelRegistryEvent event) {
+			ModelLoader.setCustomStateMapper(BlockRegistry.treasure, new StateMapperBase() {
+				@Override
+				public ModelResourceLocation getModelResourceLocation(IBlockState state) {
+					return new ModelResourceLocation("beneficium:treasure");
+				}
+			});
+
+			ModelLoader.setCustomModelResourceLocation(ItemRegistry.talismanOfTheBenefactor, 0,
+					new ModelResourceLocation(Beneficium.locate("talisman"), "inventory"));
+			ModelLoader.setCustomModelResourceLocation(ItemRegistry.talismanOfTheBenefactor, 1,
+					new ModelResourceLocation(Beneficium.locate("talisman"), "inventory"));
+
+			ModelLoader.setCustomModelResourceLocation(ItemRegistry.artifactPickaxe, 0,
+					new ModelResourceLocation(Beneficium.locate("artifact_pickaxe"), "inventory"));
+			ModelLoader.setCustomModelResourceLocation(ItemRegistry.artifactPickaxe, 1,
+					new ModelResourceLocation(Beneficium.locate("artifact_pickaxe"), "inventory"));
+
+			ModelLoader.setCustomModelResourceLocation(ItemRegistry.guardiansCharm, 0,
+					new ModelResourceLocation(Beneficium.locate("guardians_charm"), "inventory"));
+
+			ModelLoader.setCustomModelResourceLocation(ItemRegistry.treasure, 0,
+					new ModelResourceLocation(Beneficium.locate("treasure"), "inventory"));
+		}
+		
 	}
 
 }

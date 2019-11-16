@@ -39,23 +39,30 @@ import net.minecraftforge.fml.common.Mod.Instance;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLServerStoppingEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.common.versioning.ArtifactVersion;
+import net.minecraftforge.fml.relauncher.FMLLaunchHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import xiroc.beneficium.common.advancement.trigger.TriggerRegistry;
 import xiroc.beneficium.common.block.tileentity.TileEntityTreasureChest;
 import xiroc.beneficium.common.item.ItemArtifactPickaxe;
 import xiroc.beneficium.common.item.ItemTalismanOfTheBenefactor;
+import xiroc.beneficium.common.loot.LootTableHelper;
+import xiroc.beneficium.common.loot.TreasurePositionFile;
 import xiroc.beneficium.common.network.PacketServerConfig;
 import xiroc.beneficium.common.network.PacketSound;
+import xiroc.beneficium.common.proxy.ServerProxy;
 import xiroc.beneficium.common.util.ConfigHelper;
 import xiroc.beneficium.common.util.CreativeTabBeneficium;
 import xiroc.beneficium.common.util.EventManager;
 import xiroc.beneficium.common.util.GuiHandler;
 import xiroc.beneficium.common.util.NetHelper;
 import xiroc.beneficium.common.util.Reference;
+import xiroc.beneficium.common.world.WorldGenTreasureChest;
 
 @Mod(modid = Reference.MODID, name = Reference.NAME, version = Reference.VERSION2, acceptedMinecraftVersions = Reference.MC_VERSIONS, dependencies = Reference.DEPENDENCIES)
 public class Beneficium {
@@ -69,6 +76,9 @@ public class Beneficium {
 
 	public static final CreativeTabBeneficium tabBeneficium = new CreativeTabBeneficium();
 
+	@SidedProxy(serverSide = "xiroc.beneficium.common.proxy.ServerProxy", clientSide = "xiroc.beneficium.common.proxy.ClientProxy")
+	public static ServerProxy proxy;
+
 	public static int packetDiscriminator = 0;
 
 	@EventHandler
@@ -80,22 +90,31 @@ public class Beneficium {
 		data.version = Reference.VERSION;
 		data.logoFile = "assets/beneficium/textures/logo/logo.png";
 		data.url = "http://xiroc.ovh/beneficium/beneficium";
+		data.description = "You can download an alternative texturepack for the talismans here: "
+				+ NetHelper.resourcePackURL;
 		MinecraftForge.EVENT_BUS.register(new EventManager());
-		if (isSide(Side.CLIENT))
-			if (ConfigHelper.getBoolean("download_alternative_talisman_texturepack"))
-				NetHelper.downloadResourcePack();
+		if(isSide(Side.CLIENT))
+			MinecraftForge.EVENT_BUS.register(new EventManager.ClientEventManager());
 	}
 
 	@EventHandler
 	public void init(FMLInitializationEvent event) {
+		LootTableHelper.registerLootTables();
 		TriggerRegistry.register();
 		if (!ConfigHelper.loaded)
 			ConfigHelper.load();
+		proxy.load();
 		NET.registerMessage(PacketSound.PacketHanderSound.class, PacketSound.class, packetDiscriminator++, Side.CLIENT);
 		NET.registerMessage(PacketServerConfig.PacketHandlerServerConfig.class, PacketServerConfig.class,
 				packetDiscriminator++, Side.CLIENT);
 		NetworkRegistry.INSTANCE.registerGuiHandler(beneficium, new GuiHandler());
 		GameRegistry.registerTileEntity(TileEntityTreasureChest.class, locate("treasure"));
+		if (ConfigHelper.getBoolean("generate_treasure"))
+			GameRegistry.registerWorldGenerator(new WorldGenTreasureChest(), 1);
+		/*
+		 * if (isSide(Side.SERVER)) treasurePositionFile = new TreasurePositionFile( new
+		 * File(Loader.instance().getConfigDir(), "Beneficium/treasurePositions.txt"));
+		 */
 	}
 
 	public static ResourceLocation locate(String path) {
@@ -103,6 +122,7 @@ public class Beneficium {
 	}
 
 	public static boolean isSide(Side side2) {
+//		logger.info("{}, {}",FMLCommonHandler.instance().getSide(), FMLCommonHandler.instance().getSide().equals(side2));
 		return FMLCommonHandler.instance().getSide().equals(side2);
 	}
 
